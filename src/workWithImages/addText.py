@@ -33,32 +33,29 @@ def addText(imageData: json):
             print(e)
             continue
 
-        text = textNode['text']
-        fontSize = 1.0
-        fontWidth = 0.1
-        fontHeight = 0.1
-        textFont = ImageFont.load_default(fontSize)
-        textBBox = textFont.getbbox(textNode['text'])
-        textSize = (textBBox[2] - textBBox[0], textBBox[3] - textBBox[1])
-        print(textSize, fontSize)
-
-        scale = min((rightPoint[0] - leftPoint[0]) * 0.95 / textSize[0],
-                    (rightPoint[1] - leftPoint[1]) * 0.95 / textSize[1])
-
-        textFontNew = ImageFont.load_default(size=(fontSize * scale))
-        textBBoxNew = textFontNew.getbbox(textNode['text'])
-        textSizeNew = (textBBoxNew[2] - textBBoxNew[0], textBBoxNew[3] - textBBoxNew[1])
-        print(textSizeNew, leftPoint, rightPoint)
-
         draw = ImageDraw.Draw(image)
+
+        text = textNode['text']
+        imageSize = (rightPoint[0] - leftPoint[0], rightPoint[1] - leftPoint[1])
+
+        textSize = [0, 0]
+        textFont = ImageFont.load_default(1)
+        for i in range(1, 200):
+            textFont = ImageFont.load_default(i)
+            textSize = [0, 0]
+            _, _, textSize[0], textSize[1] = draw.multiline_textbbox((0, 0), text, font=textFont)
+
+            if textSize[0] > imageSize[0] * 0.95 or textSize[1] > imageSize[1] * 0.95:
+                break
 
         centerPoint = [(rightPoint[0] + leftPoint[0]) / 2,
                        (rightPoint[1] + leftPoint[1]) / 2]
-        centerPoint[0] -= textSizeNew[0] / 2
-        centerPoint[1] -= textSizeNew[1] / 2 + fontSize * scale * 0.25
+        centerPoint[0] -= textSize[0] / 2
+        centerPoint[1] -= textSize[1] / 2
         print(centerPoint)
 
-        draw.text(centerPoint, text, fill=(0, 0, 0), font=textFontNew)
+        draw.text(centerPoint, text, fill=(0, 0, 0), font=textFont)
 
     image.save('results/' + imageData['file'] + '.png')
     # image.show()
+
