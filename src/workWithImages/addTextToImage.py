@@ -66,7 +66,6 @@ def addTextToImage(imageData: json) -> str:
     for textNode in imageData['texts']:
         addCurrentText(textNode, width, height, image)
 
-    # newName = str(uuid4())
-    newName = '1'
+    newName = str(uuid4())
     image.save('results/' + newName + '.png')
     return newName
