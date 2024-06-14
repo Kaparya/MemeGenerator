@@ -1,3 +1,3 @@
-from src.workWithImages.addText import addTextToImage
+from src.workWithImages.addTextToImage import addTextToImage
 
 __all__ = ["addTextToImage"]
