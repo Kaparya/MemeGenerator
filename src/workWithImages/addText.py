@@ -1,4 +1,5 @@
 import json
+from uuid import uuid4
 
 from PIL import Image
 from PIL import ImageDraw
@@ -10,10 +11,10 @@ def checkBounds(leftPoint, rightPoint, bounds):
         if leftPoint[i] > rightPoint[i]:
             leftPoint[i], rightPoint[i] = rightPoint[i], leftPoint[i]
         elif leftPoint[i] == rightPoint[i]:
-            raise Exception('Text plane is to small for the text')
+            raise Exception(f'Text plane {leftPoint}, {rightPoint} is to small for the text\n')
         if leftPoint[i] >= bounds[i] or leftPoint[i] < i \
                 or rightPoint[i] >= bounds[i] or rightPoint[i] < i:
-            raise Exception(f'Text plane: {leftPoint}, {rightPoint}\nOut of bounds: {bounds[0]} x {bounds[1]}')
+            raise Exception(f'Text plane: {leftPoint}, {rightPoint} out of image bounds: {bounds[0]} x {bounds[1]}\n')
 
 
 def addCurrentText(textNode, width, height, image):
@@ -47,18 +48,17 @@ def addCurrentText(textNode, width, height, image):
                    (rightPoint[1] + leftPoint[1]) / 2]
     centerPoint[0] -= textSize[0] / 2
     centerPoint[1] -= textSize[1] / 2
-    print(centerPoint)
 
     draw.text(centerPoint, text, fill=(0, 0, 0), font=textFont)
 
 
-def addText(imageData: json):
-    print(imageData['file'])
+def addTextToImage(imageData: json) -> str:
     image = Image.open('images/' + imageData['file'] + '.png')
 
     width, height = image.size
     for textNode in imageData['texts']:
         addCurrentText(textNode, width, height, image)
 
-    image.save('results/' + imageData['file'] + '.png')
-    # image.show()
+    newName = str(uuid4())
+    image.save('results/' + newName + '.png')
+    return newName
