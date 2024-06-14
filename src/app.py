@@ -11,10 +11,10 @@ def main():
     # TODO: 2. Get json from server
     with open('example.json') as example:
         data = json.load(example)
+        try:
+            newName = addTextToImage(data)
+        except FileNotFoundError as _:
+            print('Load image before trying to add text')
+            return -1
 
-    try:
-        newName = addTextToImage(data)
-    except FileNotFoundError as _:
-        print('Load image before trying to add text to it')
-        return -1
     print(f'New image name: {newName}')
