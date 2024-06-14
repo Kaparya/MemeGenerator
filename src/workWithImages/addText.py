@@ -12,8 +12,8 @@ def checkBounds(leftPoint, rightPoint, bounds):
             leftPoint[i], rightPoint[i] = rightPoint[i], leftPoint[i]
         elif leftPoint[i] == rightPoint[i]:
             raise Exception(f'Text plane {leftPoint}, {rightPoint} is too small for the text\n')
-        if leftPoint[i] >= bounds[i] or leftPoint[i] < i \
-                or rightPoint[i] >= bounds[i] or rightPoint[i] < i:
+        if leftPoint[i] >= bounds[i] or leftPoint[i] < 0 \
+                or rightPoint[i] >= bounds[i] or rightPoint[i] < 0:
             raise Exception(f'Text plane: {leftPoint}, {rightPoint} out of image bounds: {bounds[0]} x {bounds[1]}\n')
 
 
@@ -66,6 +66,7 @@ def addTextToImage(imageData: json) -> str:
     for textNode in imageData['texts']:
         addCurrentText(textNode, width, height, image)
 
-    newName = str(uuid4())
+    # newName = str(uuid4())
+    newName = '1'
     image.save('results/' + newName + '.png')
     return newName
