@@ -12,7 +12,10 @@ app = FastAPI()
 
 @app.post("/load_image/")
 async def load_image(file: UploadFile):
-    image = Image.open(file.file)
+    try:
+        image = Image.open(file.file)
+    except Exception:
+        return {'error': 'Wrong file format'}
 
     newName = str(uuid4())
     while Path('images/' + newName + '.png').exists():
