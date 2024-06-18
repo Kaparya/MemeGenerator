@@ -1,5 +1,5 @@
-from server.src import addTextToImage
 from server.schemas import LoadImageResponse, ModifyImageResponse
+from server.src import addTextToImage
 
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
