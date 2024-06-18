@@ -1,5 +1,5 @@
 from server.src import addTextToImage
-from server.schemas import ModifyImageResponse
+from server.schemas import LoadImageResponse, ModifyImageResponse
 
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
@@ -11,21 +11,21 @@ from uuid import uuid4
 app = FastAPI()
 
 
-@app.post("/load_image/", response_model=ModifyImageResponse)
-async def load_image(file: UploadFile) -> ModifyImageResponse:
+@app.post("/load_image/", response_model=LoadImageResponse)
+async def load_image(file: UploadFile) -> LoadImageResponse:
     try:
         image = Image.open(file.file)
     except Exception:
-        return ModifyImageResponse(
+        return LoadImageResponse(
             status='failed',
             error='Wrong file format'
         )
 
     newName = str(uuid4())
     image.save('images/' + newName + '.png')
-    return ModifyImageResponse(
+    return LoadImageResponse(
         status='Success',
-        modifiedImageName=newName,
+        loadedImageName=newName,
         description=f'U can modify image via \'modify_image\' request'
     )
 
@@ -54,7 +54,7 @@ async def modify_image(data: Dict[AnyStr, Any]) -> ModifyImageResponse:
 async def get_image(fileName: str) -> Any:
     image_path = Path('results/' + fileName + '.png')
     if not image_path.is_file():
-        return ModifyImageResponse(
+        return LoadImageResponse(
             status='Failed',
             error='Image not found on the server'
         )

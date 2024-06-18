@@ -1,3 +1,3 @@
-from server.schemas.modify_image_response import ModifyImageResponse
+from server.schemas.image_response import LoadImageResponse, ModifyImageResponse
 
-__all__ = ["ModifyImageResponse"]
+__all__ = ["LoadImageResponse", "ModifyImageResponse"]
