@@ -1,6 +1,5 @@
 import json
 
-from pathlib import Path
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -78,7 +77,5 @@ def addTextToImage(imageData: json, response: dict) -> str:
         addCurrentText(textNode, width, height, image, response)
 
     newName = str(uuid4())
-    while Path('results/' + newName + '.png').exists():
-        newName = str(uuid4())
     image.save('results/' + newName + '.png')
     return newName
